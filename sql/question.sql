@@ -32,3 +32,16 @@ SELECT part, assembly_step FROM parts_assembly WHERE finish_date IS NULL;
 
 SELECT (SELECT COUNT(user_id) FROM viewership WHERE device_type = 'phone' OR device_type = 'tablet') as mobile_views,
 (SELECT COUNT(user_id) FROM viewership WHERE device_type = 'laptop') as laptop_views
+
+--https://datalemur.com/questions/sql-average-post-hiatus-1
+SELECT user_id, EXTRACT(DAY FROM MAX(post_date) - MIN(post_date)) FROM posts
+WHERE EXTRACT(YEAR FROM post_date) = '2021'
+GROUP BY user_id
+HAVING COUNT(*) >1 ;
+
+-- https://datalemur.com/questions/teams-power-users
+SELECT sender_id, COUNT(message_id) as message_count FROM messages
+WHERE EXTRACT(MONTH FROM sent_date) = '08' AND EXTRACT(YEAR FROM sent_date) = '2022'
+GROUP BY sender_id
+ORDER BY message_count DESC
+LIMIT 2;
